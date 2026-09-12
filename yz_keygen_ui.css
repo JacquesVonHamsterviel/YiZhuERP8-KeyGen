@@ -1,0 +1,103 @@
+:root{
+  --face:#f0f0f0; --btnface:#e9e9e9; --btnface2:#dcdcdc;
+  --border:#a0a0a0; --shadow:#707070; --hl:#ffffff;
+  --title1:#0a6cd6; --title2:#3f8ee6; --ink:#000;
+}
+html,body{margin:0;background:#5b7fa6;height:100%;}
+body{display:flex;align-items:flex-start;justify-content:center;padding:24px;
+     font-family:"Microsoft YaHei","MS Shell Dlg 2",Tahoma,SimSun,sans-serif;
+     font-size:12px;color:var(--ink);}
+.win{width:660px;background:var(--face);border:1px solid #b8b8b8;
+     box-shadow:0 10px 34px rgba(0,0,0,.35);}
+/* Windows 10 风格标题栏：白底深色标题 + 右侧扁平标题按钮 */
+.titlebar{height:32px;display:flex;align-items:center;
+     background:#ffffff;color:#000;font-weight:normal;
+     padding:0;user-select:none;border-bottom:1px solid #e2e2e2;}
+.titlebar .ico{width:18px;height:18px;margin:0 8px 0 10px;display:inline-flex;
+     align-items:center;justify-content:center;font-size:11px;}
+.titlebar .ico img{width:18px;height:18px;display:block;}
+.titlebar .t{flex:1;font-size:12px;color:#1a1a1a;}
+.titlebar .btns{display:flex;align-self:stretch;}
+.titlebar .capbtn{width:46px;display:flex;align-items:center;justify-content:center;
+     font-family:"Segoe UI Symbol","Segoe UI",Tahoma,sans-serif;font-size:11px;
+     color:#000;background:transparent;border:0;cursor:default;line-height:1;}
+.titlebar .capbtn.min:hover,.titlebar .capbtn.max:hover{background:#e5e5e5;}
+.titlebar .capbtn.close{cursor:pointer;}
+.titlebar .capbtn.close:hover{background:#e81123;color:#fff;}
+.titlebar .capbtn.disabled{color:#c8c8c8;cursor:default;}
+.titlebar .capbtn.disabled:hover{background:transparent;}
+/* 最小化：用 CSS 画一条 Win10 标准长度的横线（比 ─ 字形更长更清晰）*/
+.titlebar .capbtn.min{font-size:0;}
+.titlebar .capbtn.min::before{content:"";width:11px;height:1px;background:currentColor;}
+.titlebar .capbtn.max{cursor:pointer;}
+/* 最大化：窗口铺满视口；再点还原 */
+body.maxed{padding:0;}
+body.maxed .win{width:100%;min-height:100vh;box-shadow:none;border:0;}
+/* 拖动窗口时禁止选中文本 */
+body.dragging{user-select:none;-webkit-user-select:none;cursor:default;}
+/* 贴靠预览：拖到顶部时铺满视口的半透明蓝框（Windows 式），不挡指针；窗口浮在其上 */
+.snaphint{position:fixed;inset:0;z-index:9990;display:none;pointer-events:none;box-sizing:border-box;
+     background:rgba(0,120,215,.18);border:2px solid rgba(0,120,215,.55);}
+body.dragging .win{z-index:10000;}
+.client{display:flex;padding:10px;gap:10px;}
+.left{width:200px;display:flex;flex-direction:column;}
+.right{flex:1;display:flex;flex-direction:column;gap:8px;}
+fieldset{border:1px solid var(--shadow);border-top-color:#fff;border-left-color:#fff;
+     margin:0;padding:8px 10px 10px;background:var(--face);}
+legend{padding:0 4px;font-weight:bold;}
+.row{display:flex;align-items:center;margin:5px 0;gap:6px;flex-wrap:wrap;}
+label.f{display:inline-block;text-align:right;}
+input[type=text]{font-family:inherit;font-size:12px;padding:2px 4px;
+     border:1px solid var(--shadow);border-right-color:#fff;border-bottom-color:#fff;
+     background:#fff;height:20px;box-sizing:border-box;}
+input[disabled]{background:#ececec;color:#888;}
+.btn{font-family:inherit;font-size:12px;padding:3px 10px;min-height:24px;
+     background:linear-gradient(to bottom,#fbfbfb,var(--btnface2));
+     border:1px solid var(--border);border-top-color:#fff;border-left-color:#fff;
+     cursor:pointer;user-select:none;}
+.btn:active{background:var(--btnface2);border-color:var(--shadow);}
+.btn[disabled]{color:#999;cursor:default;}
+.listhdr{background:linear-gradient(to bottom,#fff,#e6e6e6);border:1px solid var(--shadow);
+     border-bottom:none;padding:3px 6px;font-weight:bold;}
+.list{flex:1;min-height:0;border:1px solid var(--shadow);background:#fff;
+     border-top-color:#fff;border-left-color:#fff;overflow:auto;padding:0;}
+.list .empty{color:#999;padding:10px;font-size:11px;}
+.mod{display:flex;align-items:center;padding:1px 4px;border-bottom:1px solid #eee;font-size:11px;}
+.mod label{flex:1;display:flex;align-items:center;gap:3px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mod input[type=checkbox]{margin:0;}
+.mod .mcnt{width:34px;text-align:center;font-size:11px;padding:1px;border:1px solid var(--shadow);}
+.list.dim{opacity:.45;pointer-events:none;}
+/* 模块列表“灰色蒙版”：未勾选任何模块时，给列表盖一层半透明灰。纯视觉——veil 用
+   pointer-events:none 不拦点击，仍可点勾选框选择模块；一旦有勾选即自动移除蒙版。*/
+.list-wrap{position:relative;flex:1;min-height:280px;display:flex;flex-direction:column;}
+.veil{position:absolute;inset:0;display:none;pointer-events:none;
+     background:rgba(140,140,140,.32);align-items:center;justify-content:center;}
+.veil .veil-txt{background:rgba(0,0,0,.42);color:#fff;font-size:11px;
+     padding:2px 10px;border-radius:3px;}
+.list-wrap.masked .veil{display:flex;}
+.btn.sel{background:linear-gradient(to bottom,#cfe6ff,#9fc8f0);border-color:#3f8ee6;}
+.radio{display:inline-flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap;}
+.radio input{margin:0;}
+.modall{display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;}
+input[type=date]{font-family:inherit;font-size:12px;height:22px;border:1px solid var(--shadow);}
+.list .mod{padding:2px 6px;border-bottom:1px solid #eee;}
+.list .mod input{margin-right:6px;vertical-align:-1px;}
+.gen{align-self:flex-end;margin-top:2px;font-size:13px;font-weight:bold;
+     padding:6px 18px;}
+.out input{background:#fffde8;font-weight:bold;color:#a00;}
+.note{color:#666;font-size:11px;margin:6px 10px 2px;}
+.warn{color:#b00;font-size:11px;margin:2px 10px;min-height:14px;}
+.copy{font-size:11px;padding:1px 6px;min-height:0;}
+/* 触摸拖动标题栏时不触发页面滚动/缩放（平板等触屏桌面模式下才拖动） */
+.titlebar{touch-action:none;}
+/* ===== 移动端（窄屏）：窗口铺满屏幕、左右两栏改上下堆叠、隐藏最小化/最大化 ===== */
+@media (max-width:700px){
+  html,body{height:auto;}
+  body{padding:0;display:block;}                 /* 取消居中，窗口铺满整屏 */
+  .win{width:100%;min-height:100vh;box-shadow:none;border:0;}
+  .client{flex-direction:column;padding:8px;gap:8px;}
+  .left{width:auto;}                             /* 模块列表整行 */
+  .list-wrap{min-height:200px;}
+  .titlebar .capbtn.min,.titlebar .capbtn.max{display:none;}  /* 铺满时这俩无意义 */
+  .titlebar .capbtn.close{width:40px;}
+}
